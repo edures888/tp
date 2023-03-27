@@ -469,6 +469,80 @@ respective field requested.
     * Cons:
         * Some part of the code is the same as EditCommand.
 
+### \[Developed\] Finding free time slots
+This feature allows a user to display the unoccupied time slots within a group
+
+
+Timeslot finding feature requires a few preprocessing or setup steps to function with efficiency
+
+Instead of traversing through the IsolatedEvents and RecurringEvents of each Person in the Group, it would be a better to have some an auxiliary table to reduce computation. The current implementation uses the idea of a bitmask to determine which intervals are occupied. A TimeMask is simply an array of 7 numbers, each reflecting the occupancy of each time slot (1 hour each) throughout a day. Thus, it reflects the occupancies of each time slot in a week. The ordering of the days follow that of Java’s DayOfWeek API where Monday has the lowest value of 1. The first number in the array then represents Monday, the second represents Tuesday and so on. Each Person’s RecurringEventList will then maintain a TimeMask that gets updated whenever a RecurringEvent is added for that Person. How does the update work? First we determine the day of the week that the RecurringEvent occurs on.
+
+111 based on Event’s interval and then bitwise shift right to match the length of the bitmask. Then simply do a Bitwise OR to combine the masks. Thus a bit 1 indicates the occupancy of a time slot and a bit 0 means that it is unoccupied.
+
+When FindTimeSlotCommand executes with a Group and Date as its parameters, the ModelManager will instantiate a parent TimeMask. This means that all of the time slots will be unoccupied by default. The ModelManager will then check through all Persons in the specified Group for its RecurringEventList and IsolatedEventList. It retrieves the TimeMask from the RecurringEventList and then manually updates it with Events in the IsolatedEventList. Then this resulting TimeMask is merged with the parent TimeMask with another Bitwise OR operation. ?Steps 2-5 are then repeated until we have checked all of the Persons in the Group. The parent TimeMask is then converted to a list of unoccupied time slots for the UI to display.
+
+Pros: Bitwise operations allows for ease of computing occupancy of time slots throughout a week.
+
+Cons: Fixed Granularity of 0.5 / 1H, uniformly sliced slots like a timetable, instead of slots like 9.53 - 10.17. Unable to have arbitrary granularity since the bitwise operations involves numbers that are ints or longs, which might overflow if granularity becomes too high and correctness would be affected.
+
+Increased coupling and reduced cohesion. Each operation in the RecurringEventList requires updating of the TimeMask and thus it is not easy to separate the TimeMask class.
+
+?A possible solution would be to implement the Observer architecture. In this case, TimeMask would be another component in the Model category and we attach listeners to the respective RecurringEventLists. With this, the updating of TimeMasks due to changes in RecurringEventLists can be triggered, rather than called directly from RecurringEventLists.
+
+In light of further optimization, Groups are unable to store a TimeMask that allows for instant retrieval of the free time slots. There are a couple of factors involved that might affect the correctness of this approach. For example, if a person were to be removed from a group, it is not certain that the Group now has more free time slots since there may be other members who share the same occupied time slots. Suppose Alice and Bob are both in the ‘CS2103’ Group and Alice has a recurring Lecture on Mondays from 1pm to 2pm. Alice has now been removed from the Group. We cannot update the shared ‘CS2103’ Group to free the 1pm time slot, since Bob might also have the same Event. So, why not check if Bob has the same Event? It is then a possible approach to follow this implementation, but this requires extra checking of each member’s Events upon modification of any Group’s information.
+
+Alternative: With each command call, merge all the intervals of Events belonging to all Persons in a Group. The Events would be limited within a week from the date parameter in the FindTimeCommand. It helps that the EventLists are already sorted. The ideal approach would be to combine all the lists of Events, then sort them based on the start DateTime and then sieve through the list for any overlapping intervals and combine them.
+
+?The contrast is that the first approach capitalizes on the property of RecurringEvents.
+
+?It may be more common and meaningful to find time slots that are recurring as well.
+
+?Bitmask approach is significantly more performant when users only has RecurringEvents and not IsolatedEvents.
+
+### Activity Diagram
+The following activity diagram summarises what happens when a user executes an `free` command:
+
+img
+
+### Sequence Diagram
+The following sequence diagram illustrates the interactio
+
+img
+
+1. ewq
+
+Postconditions
+Preconditions
+
+### Design Consideration
+
+**Aspect: asd**
+* **Alternative 1:**:
+    * Pros:
+      * 
+    * Cons:
+      * qwe
+
+* **[Current implementation] Alternative 2:**
+
+* **Justification**
+  *eqw
+
+**Aspect: asd**
+* **Alternative 1:**:
+    * Pros:
+        *
+    * Cons:
+        * qwe
+
+* **[Current implementation] Alternative 2:**
+
+* **Justification**
+  *eqw
+    *
+
+
+
 ### \[Proposed\] Undo/redo feature
 
 
