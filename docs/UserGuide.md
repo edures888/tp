@@ -290,6 +290,23 @@ Examples:
 
 ### List all events: `event list`  [coming soon]
 
+### Find free time slots: `free`
+
+[Insert Screenshot, coming soon]
+
+Displays the time slots in a week when all members of the specified group are free (no events).
+
+Format: free INDEX [date]
+
+* Finds unoccupied time slots within members of the group at the specified `INDEX`. The index refers to the index number
+shown in the displayed group list. The index *must be a positive* 1, 2, 3 ...
+* The date field is optional. The time slots will be shown for the week ahead, starting from that date. If it is not 
+provided, then the current date will be used.
+
+### Importing a Person: `import` [coming soon]
+
+### Exporting a Person: `export` [coming soon]
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
