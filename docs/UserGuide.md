@@ -296,12 +296,13 @@ Examples:
 
 Displays the time slots in a week when all members of the specified group are free (no events).
 
-Format: free INDEX [date]
+Format: free GROUP_INDEX [START_DATE]
 
 * Finds unoccupied time slots within members of the group at the specified `INDEX`. The index refers to the index number
 shown in the displayed group list. The index *must be a positive* 1, 2, 3 ...
-* The date field is optional. The time slots will be shown for the week ahead, starting from that date. If it is not 
-provided, then the current date will be used.
+* The `START_DATE` field is optional. The time slots will be shown for the week ahead, starting from that date. If it is
+not provided, then the current date will be used.
+* `START_DATE` must be of the format: `dd/MM/yyyy HH:mm`
 
 ### Importing a Person: `import` [coming soon]
 
@@ -346,23 +347,26 @@ _Details coming soon ..._
 
 ## Command summary
 
-| Action                     | Format, Examples                                                                                                                                                            |
-|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Add**                    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`       |
-| **Clear**                  | `clear`                                                                                                                                                                     |
-| **Delete**                 | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                         |
-| **Edit**                   | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG] [g/GROUP]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com t/CS2103T g/`<br> e.g., `edit 3 m/ t/CS2103T` |
-| **Find**                   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                                  |
-| **List**                   | `list`                                                                                                                                                                      |
-| **Help**                   | `help`                                                                                                                                                                      |
-| **Group create**           | `group_create g/GROUP_NAME`                                                                                                                                                 |
-| **Group delete**           | `group_delete GROUP_INDEX`                                                                                                                                                  |
-| **Group list**             | `group_list`                                                                                                                                                                |
-| **Group find**             | `group_find KEYWORD [MORE_KEYWORDS]` <br> e.g., `group_find CS2103 CS2101`                                                                                                  |
-| **Isolated Event create**  | `event_create INDEX ie/EVENT_NAME f/START_DATE t/END_DATE`                                                                                                                  |
-| **Isolated Event delete**  | `ie_delete [INDEX_OF_PERSON] [INDEX_OF_EVENT]`                                                                                                                              |
-| **Isolated Event update**  | `ie_edit [INDEX_OF_PERSON] [INDEX_OF_EVENT] ie/NAME f/START_DATE t/END_DATE`                                                                                                |
+| Action                    | Format, Examples                                                                                                                                                            |
+|---------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Add**                   | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`       |
+| **Clear**                 | `clear`                                                                                                                                                                     |
+| **Delete**                | `delete INDEX`<br> e.g., `delete 3`                                                                                                                                         |
+| **Edit**                  | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG] [g/GROUP]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com t/CS2103T g/`<br> e.g., `edit 3 m/ t/CS2103T` |
+| **Find**                  | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                                  |
+| **List**                  | `list`                                                                                                                                                                      |
+| **Help**                  | `help`                                                                                                                                                                      |
+| **Group create**          | `group_create g/GROUP_NAME`                                                                                                                                                 |
+| **Group delete**          | `group_delete GROUP_INDEX`                                                                                                                                                  |
+| **Group list**            | `group_list`                                                                                                                                                                |
+| **Group find**            | `group_find KEYWORD [MORE_KEYWORDS]` <br> e.g., `group_find CS2103 CS2101`                                                                                                  |
+| **Isolated Event create** | `event_create INDEX ie/EVENT_NAME f/START_DATE t/END_DATE`                                                                                                                  |
+| **Isolated Event delete** | `ie_delete [INDEX_OF_PERSON] [INDEX_OF_EVENT]`                                                                                                                              |
+| **Isolated Event update** | `ie_edit [INDEX_OF_PERSON] [INDEX_OF_EVENT] ie/NAME f/START_DATE t/END_DATE`                                                                                                |
 | **Recurring Event create** | `event_create_recur INDEX re/EVENT_NAME d/DAY_OF_WEEK f/START_TIME t/END_TIME`                                                                                              |
 | **Recurring Event delete** | `re_delete [INDEX_OF_PERSON] [INDEX_OF_EVENT]`                                                                                                                              |
 | **Recurring Event update** | `re_edit [INDEX_OF_PERSON] [INDEX_OF_EVENT] re/NAME d/DAY_OF_WEEK f/START_TIME t/END_TIME`                                                                                  |
-| **Event list**             | [coming soon]                                                                                                                                                               |
+| **Event list**            | [coming soon]                                                                                                                                                               |
+| **Free**                  | `free GROUP_INDEX` [START_DATE]                                                                                                                                             |
+| **Import**                | [coming soon]                                                                                                                                                               |
+| **Export**                | [coming soon]                                                                                                                                                               |
