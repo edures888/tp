@@ -119,7 +119,6 @@ public class TimeMask {
         checkValidDayIndex(dayIndex);
         checkValidHourIndexes(startHourIndex, endHourIndex);
 
-        // TODO: Check, requires JDK 11
         int startBits = Integer.parseInt("1".repeat(endHourIndex - startHourIndex + 1), 2);
         int mask = ~(startBits << startHourIndex);
 
@@ -130,6 +129,10 @@ public class TimeMask {
         checkValidDayIndex(dayIndex);
         checkValidHourIndexes(startHourIndex, endHourIndex);
 
+        // Don't need to update if start and end time are the same
+        if (startHourIndex == endHourIndex) {
+            return;
+        }
         int startBits = Integer.parseInt("1".repeat(endHourIndex - startHourIndex + 1), 2);
         int mask = startBits << startHourIndex;
         weeklyOccupancy[dayIndex] = weeklyOccupancy[dayIndex] | mask;
@@ -159,7 +162,7 @@ public class TimeMask {
     }
 
     private void checkValidDayIndex(int dayIndex) {
-        if (dayIndex < 0 || dayIndex > WINDOW_RANGE) {
+        if (dayIndex < 0 || dayIndex >= WINDOW_RANGE) {
             // TODO: refactor
             throw new RuntimeException("Invalid day index!");
         }
@@ -167,7 +170,7 @@ public class TimeMask {
 
     private void checkValidHourIndexes(int ...hourIndexes) {
         for (int hour : hourIndexes) {
-            if (hour < 0 || hour > 24) {
+            if (hour < 0 || hour > 23) {
                 // TODO: refactor
                 throw new RuntimeException("Invalid hour index!");
             }
@@ -182,8 +185,15 @@ public class TimeMask {
     public void modifyOccupancy(RecurringEvent recurringEvent, boolean toOccupy) {
         int dayIndex = getZeroBasedDayIndex(recurringEvent.getDayOfWeek());
         int startHourIndex = recurringEvent.getStartTime().getHour();
+        int endHourIndex = recurringEvent.getEndTime().getHour();
+
+        // Don't need to update if start and end time are the same
+        if (startHourIndex == endHourIndex) {
+            return;
+        }
+
         // Shouldn't occupy the next slot
-        int endHourIndex = recurringEvent.getEndTime().getHour() - 1;
+        endHourIndex--;
 
         if (endHourIndex < 0) {
             endHourIndex = LAST_HOUR_INDEX;
